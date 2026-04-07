@@ -82,8 +82,12 @@ def roberts_edge_detection(image):
     Returns:
     - The image with edges detected.
     """
-    kernel_x = cv2.getDerivKernels(1, 0, 2)[0]
-    kernel_y = cv2.getDerivKernels(0, 1, 2)[0]
+    # Roberts X kernel
+    kernel_x = cv2.getDerivKernels(1, 0, 1)[0]
+    # Roberts Y kernel
+    kernel_y = cv2.getDerivKernels(0, 1, 1)[0]
+    
     edge_x = cv2.filter2D(image, cv2.CV_64F, kernel_x)
     edge_y = cv2.filter2D(image, cv2.CV_64F, kernel_y)
+    
     return cv2.magnitude(edge_x, edge_y)
