@@ -5,8 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CV Filter Studio — Advanced Image Processing</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <script async src="https://docs.opencv.org/4.10.0/opencv.js" onload="initOpenCV()" onerror="handleOpenCVError()"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- OpenCV initialization functions (defined BEFORE loading opencv.js) -->
+    <script>
+        const app = {
+            cvReady: false,
+            originalImage: null,
+            displayImage: null,
+            canvasContext: null,
+            filterHistory: [],
+            currentFilter: null,
+            currentFilterParams: {},
+            filterChain: [],
+            comparisonActive: false,
+            histogramVisible: false,
+            spectrumVisible: false,
+            isProcessing: false,
+        };
+
+        function initOpenCV() {
+            if (typeof cv !== 'undefined' && cv.Mat) {
+                app.cvReady = true;
+                const spinner = document.getElementById('loadingSpinner');
+                if (spinner) spinner.style.display = 'none';
+                console.log('✓ OpenCV.js loaded successfully');
+            } else {
+                setTimeout(initOpenCV, 500);
+            }
+        }
+
+        function handleOpenCVError() {
+            console.error('Failed to load OpenCV.js from CDN');
+            const spinner = document.getElementById('loadingSpinner');
+            const spinnerText = document.querySelector('.spinner-text');
+            if (spinnerText) {
+                spinnerText.innerText = 'Error loading OpenCV. Trying backup CDN...';
+            }
+            loadOpenCVFromAlternate();
+        }
+
+        function loadOpenCVFromAlternate() {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/opencv-js@4.8.0/opencv.min.js';
+            script.async = true;
+            script.onload = initOpenCV;
+            script.onerror = function() {
+                console.error('Backup CDN also failed');
+                const spinnerText = document.querySelector('.spinner-text');
+                if (spinnerText) {
+                    spinnerText.innerText = 'Unable to load OpenCV. Please refresh and check your connection.';
+                    document.querySelector('.spinner').style.display = 'none';
+                }
+            };
+            document.head.appendChild(script);
+        }
+
+        // Timeout handler
+        setTimeout(() => {
+            if (!app.cvReady) {
+                console.warn('OpenCV loading timeout');
+                const spinnerText = document.querySelector('.spinner-text');
+                if (spinnerText) {
+                    spinnerText.innerText = 'OpenCV is taking too long. Please refresh the page.';
+                }
+            }
+        }, 45000);
+    </script>
+
+    <!-- Load OpenCV.js -->
+    <script async src="https://docs.opencv.org/4.8.0/opencv.js" onload="initOpenCV()" onerror="handleOpenCVError()"></script>
+    
     <style>
         * {
             margin: 0;
@@ -997,81 +1066,6 @@
     <canvas id="webcamCanvas" style="display:none;"></canvas>
 
     <script>
-        // ─────────────────────────────────────────────────────────────────────────
-        // APPLICATION STATE
-        // ─────────────────────────────────────────────────────────────────────────
-        const app = {
-            cvReady: false,
-            originalImage: null,
-            displayImage: null,
-            canvasContext: null,
-            filterHistory: [],
-            currentFilter: null,
-            currentFilterParams: {},
-            filterChain: [],
-            comparisonActive: false,
-            histogramVisible: false,
-            spectrumVisible: false,
-            isProcessing: false,
-        };
-
-        // OpenCV Loading with proper error handling
-        function initOpenCV() {
-            if (typeof cv !== 'undefined' && cv.Mat) {
-                app.cvReady = true;
-                document.getElementById('loadingSpinner').style.display = 'none';
-                console.log('✓ OpenCV.js loaded successfully');
-            } else {
-                console.warn('CV object not ready yet, will retry...');
-                setTimeout(initOpenCV, 500);
-            }
-        }
-
-        function handleOpenCVError() {
-            console.error('Failed to load OpenCV.js from CDN');
-            document.querySelector('.spinner-text').innerText = 'Error loading OpenCV. Retrying...';
-            
-            // Try alternate CDN
-            setTimeout(() => {
-                if (typeof cv === 'undefined') {
-                    loadOpenCVFromAlternate();
-                }
-            }, 1000);
-        }
-
-        function loadOpenCVFromAlternate() {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@techstark/opencv-js@4.8.0/opencv.min.js';
-            script.async = true;
-            script.onload = initOpenCV;
-            script.onerror = () => {
-                console.error('All OpenCV CDNs failed');
-                document.querySelector('.spinner-text').innerText = 'Unable to load OpenCV. Please refresh and check your internet connection.';
-                document.querySelector('.spinner').style.display = 'none';
-            };
-            document.head.appendChild(script);
-        }
-
-        // Fallback: check if cv is ready on page load
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                if (!app.cvReady && typeof cv !== 'undefined' && cv.Mat) {
-                    initOpenCV();
-                } else if (!app.cvReady) {
-                    console.warn('OpenCV not ready after page load');
-                }
-            }, 1000);
-        });
-
-        // Timeout handler - if OpenCV doesn't load in 30 seconds, show error
-        setTimeout(() => {
-            if (!app.cvReady) {
-                document.querySelector('.spinner-text').innerText = 
-                    'OpenCV took too long to load. This may be a network issue. Try reloading the page.';
-                console.error('OpenCV failed to load within timeout');
-            }
-        }, 30000);
-
         // ─────────────────────────────────────────────────────────────────────────
         // IMAGE LOADING & MANAGEMENT
         // ─────────────────────────────────────────────────────────────────────────
