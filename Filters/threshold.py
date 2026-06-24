@@ -1,5 +1,20 @@
 import cv2 # type: ignore
 
+
+def _ensure_grayscale(image):
+    """Convert color images to grayscale so thresholding works reliably."""
+    if image.ndim == 2:
+        return image
+    if image.ndim == 3:
+        if image.shape[2] == 1:
+            return image[:, :, 0]
+        if image.shape[2] == 3:
+            return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        if image.shape[2] == 4:
+            return cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
+    raise ValueError("Unsupported image format")
+
+
 def threshold(image, threshold_value=127, max_value=255, threshold_type=cv2.THRESH_BINARY):
     """
     Apply a thresholding operation to the input image.
@@ -13,8 +28,10 @@ def threshold(image, threshold_value=127, max_value=255, threshold_type=cv2.THRE
     Returns:
     - The thresholded image.
     """
-    _, thresh_image = cv2.threshold(image, threshold_value, max_value, threshold_type)
+    gray_image = _ensure_grayscale(image)
+    _, thresh_image = cv2.threshold(gray_image, threshold_value, max_value, threshold_type)
     return thresh_image
+
 
 def adaptive_threshold(image, max_value=255, adaptive_method=cv2.ADAPTIVE_THRESH_MEAN_C, threshold_type=cv2.THRESH_BINARY, block_size=11, C=2):
     """
@@ -31,7 +48,9 @@ def adaptive_threshold(image, max_value=255, adaptive_method=cv2.ADAPTIVE_THRESH
     Returns:
     - The thresholded image.
     """
-    return cv2.adaptiveThreshold(image, max_value, adaptive_method, threshold_type, block_size, C)
+    gray_image = _ensure_grayscale(image)
+    return cv2.adaptiveThreshold(gray_image, max_value, adaptive_method, threshold_type, block_size, C)
+
 
 def otsu_threshold(image, max_value=255, threshold_type=cv2.THRESH_BINARY):
     """
@@ -45,5 +64,6 @@ def otsu_threshold(image, max_value=255, threshold_type=cv2.THRESH_BINARY):
     Returns:
     - The thresholded image.
     """
-    _, thresh_image = cv2.threshold(image, 0, max_value, threshold_type + cv2.THRESH_OTSU)
+    gray_image = _ensure_grayscale(image)
+    _, thresh_image = cv2.threshold(gray_image, 0, max_value, threshold_type + cv2.THRESH_OTSU)
     return thresh_image
