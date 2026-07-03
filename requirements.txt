@@ -1,0 +1,5 @@
+fastapi>=0.117.1
+uvicorn
+opencv-python-headless
+numpy
+python-multipart

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV Studio – Real-time Image Filters</title>
+  <meta name="description" content="Upload any image and apply blur, threshold, edge detection, and histograms – all powered by OpenCV.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔬</text></svg>">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar__logo">
+        <i class="fa-solid fa-microscope"></i>
+        <span>CV Studio</span>
+      </a>
+      <a href="static/studio.html" class="btn btn--primary btn--sm">
+        <i class="fa-solid fa-rocket"></i> Launch Studio
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero__content">
+      <div class="hero__badge">
+        <i class="fa-solid fa-bolt"></i>
+        Powered by OpenCV + FastAPI
+      </div>
+      <h1 class="hero__title">
+        Real-time <span class="highlight">Image Filters</span><br>at Your Fingertips
+      </h1>
+      <p class="hero__subtitle">
+        Upload any image and apply blur, threshold, edge detection, and histograms — all powered by OpenCV running on a fast Python backend.
+      </p>
+      <div class="hero__actions">
+        <a href="studio.html" class="btn btn--primary btn--lg">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Open Studio
+        </a>
+        <a href="#features" class="btn btn--outline btn--lg">
+          <i class="fa-solid fa-grid-2"></i> Explore Features
+        </a>
+      </div>
+
+      <!-- Decorative mockup -->
+      <div class="hero__visual">
+        <div class="hero__visual-mockup">
+          <div class="mockup-bar">
+            <span class="mockup-dot"></span>
+            <span class="mockup-dot"></span>
+            <span class="mockup-dot"></span>
+          </div>
+          <div class="mockup-content">
+            <div class="mockup-sidebar">
+              <div class="mockup-line long accent"></div>
+              <div class="mockup-line medium"></div>
+              <div class="mockup-line short"></div>
+              <div class="mockup-line long"></div>
+              <div class="mockup-line medium"></div>
+              <div class="mockup-line short"></div>
+              <div class="mockup-line long accent"></div>
+              <div class="mockup-line medium"></div>
+              <div class="mockup-line long"></div>
+            </div>
+            <div class="mockup-preview">
+              <div class="mockup-gradient-overlay"></div>
+              <i class="fa-solid fa-image"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-header__label">Features</span>
+        <h2 class="section-header__title">Everything You Need for Image Processing</h2>
+        <p class="section-header__desc">
+          From smoothing to edge detection, every tool is just a click away with real-time preview.
+        </p>
+      </div>
+
+      <div class="features__grid">
+        <!-- Blur -->
+        <div class="glass-card feature-card fade-in">
+          <div class="feature-card__icon">
+            <i class="fa-solid fa-droplet"></i>
+          </div>
+          <h3 class="feature-card__title">Blur &amp; Smoothing</h3>
+          <p class="feature-card__desc">
+            Choose from Gaussian, Median, Bilateral, and Box blur kernels. Fine-tune kernel size, sigma, and more with intuitive sliders.
+          </p>
+        </div>
+
+        <!-- Threshold -->
+        <div class="glass-card feature-card fade-in">
+          <div class="feature-card__icon">
+            <i class="fa-solid fa-circle-half-stroke"></i>
+          </div>
+          <h3 class="feature-card__title">Thresholding</h3>
+          <p class="feature-card__desc">
+            Apply Binary, Adaptive (Mean / Gaussian), and Otsu thresholding. Control threshold value, block size, and inversion in real time.
+          </p>
+        </div>
+
+        <!-- Edge Detection -->
+        <div class="glass-card feature-card fade-in">
+          <div class="feature-card__icon">
+            <i class="fa-solid fa-vector-square"></i>
+          </div>
+          <h3 class="feature-card__title">Edge Detection</h3>
+          <p class="feature-card__desc">
+            Detect edges using Canny, Sobel, Laplacian, Prewitt, Scharr, or Roberts operators. Adjust sensitivity with dual-threshold controls.
+          </p>
+        </div>
+
+        <!-- Histogram -->
+        <div class="glass-card feature-card fade-in">
+          <div class="feature-card__icon">
+            <i class="fa-solid fa-chart-column"></i>
+          </div>
+          <h3 class="feature-card__title">Histogram Analysis</h3>
+          <p class="feature-card__desc">
+            Visualize pixel intensity distributions with grayscale or full-color (RGB) histograms rendered as interactive charts or PNG exports.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer__text">&copy; 2025 CV Studio. Built with OpenCV &amp; FastAPI.</p>
+      <div class="footer__links">
+        <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/script.js" defer></script>
+</body>
+</html>

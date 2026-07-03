@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV Studio – Filter Workspace</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔬</text></svg>">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar__logo">
+        <i class="fa-solid fa-microscope"></i>
+        <span>CV Studio</span>
+      </a>
+      <a href="index.html" class="btn btn--ghost btn--sm">
+        <i class="fa-solid fa-house"></i> Home
+      </a>
+    </div>
+  </nav>
+
+  <!-- Studio Page -->
+  <main class="studio-page">
+    <div class="container">
+      <div class="studio-layout">
+
+        <!-- ============================
+             LEFT COLUMN – Controls
+             ============================ -->
+        <aside class="studio-controls">
+
+          <!-- Upload Area -->
+          <div class="glass-card" style="padding: 1.25rem;">
+            <div class="upload-area" id="upload-area">
+              <input type="file" id="file-input" accept="image/*">
+              <div class="upload-area__icon">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <p class="upload-area__text">Drop an image here or click to browse</p>
+              <p class="upload-area__hint">PNG, JPEG, WebP supported</p>
+
+              <!-- Thumbnail preview -->
+              <div class="upload-preview" id="upload-preview">
+                <img id="upload-thumb" class="upload-preview__img" src="" alt="Preview">
+                <div class="upload-preview__info">
+                  <p class="upload-preview__name" id="upload-name"></p>
+                  <p class="upload-preview__size" id="upload-size"></p>
+                </div>
+                <button class="upload-preview__clear" id="clear-btn" title="Remove image">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter Tabs -->
+          <div class="glass-card" style="padding: 1.25rem;">
+            <div class="filter-tabs">
+              <button class="filter-tab active" data-filter="blur">
+                <i class="fa-solid fa-droplet"></i> Blur
+              </button>
+              <button class="filter-tab" data-filter="threshold">
+                <i class="fa-solid fa-circle-half-stroke"></i> Threshold
+              </button>
+              <button class="filter-tab" data-filter="edge">
+                <i class="fa-solid fa-vector-square"></i> Edge
+              </button>
+              <button class="filter-tab" data-filter="histogram">
+                <i class="fa-solid fa-chart-column"></i> Histogram
+              </button>
+            </div>
+          </div>
+
+          <!-- ======================
+               BLUR Parameters
+               ====================== -->
+          <div class="glass-card" style="padding: 1.25rem;">
+            <div class="param-section active" id="params-blur">
+              <div class="param-group">
+                <label>Kernel Type</label>
+                <select class="param-select" id="blur-kernel-type">
+                  <option value="gaussian">Gaussian</option>
+                  <option value="median">Median</option>
+                  <option value="bilateral">Bilateral</option>
+                  <option value="box">Box</option>
+                </select>
+              </div>
+
+              <div class="param-group">
+                <label>Kernel Size <span class="param-value" id="blur-size-val">5</span></label>
+                <input type="range" class="param-slider" id="blur-size" min="3" max="21" step="2" value="5" data-odd="true">
+              </div>
+
+              <!-- Gaussian-specific: sigma_x -->
+              <div class="param-group" id="blur-sigma-x-group">
+                <label>Sigma X <span class="param-value" id="blur-sigma-x-val">1.0</span></label>
+                <input type="range" class="param-slider" id="blur-sigma-x" min="0.1" max="20" step="0.1" value="1.0" data-float="true">
+              </div>
+
+              <!-- Bilateral-specific params -->
+              <div id="blur-bilateral-group">
+                <div class="param-group">
+                  <label>Diameter <span class="param-value" id="blur-diameter-val">9</span></label>
+                  <input type="range" class="param-slider" id="blur-diameter" min="1" max="31" step="2" value="9" data-odd="true">
+                </div>
+                <div class="param-group">
+                  <label>Sigma Color <span class="param-value" id="blur-sigma-color-val">75</span></label>
+                  <input type="range" class="param-slider" id="blur-sigma-color" min="1" max="300" step="1" value="75">
+                </div>
+                <div class="param-group">
+                  <label>Sigma Space <span class="param-value" id="blur-sigma-space-val">75</span></label>
+                  <input type="range" class="param-slider" id="blur-sigma-space" min="1" max="300" step="1" value="75">
+                </div>
+              </div>
+            </div>
+
+            <!-- ======================
+                 THRESHOLD Parameters
+                 ====================== -->
+            <div class="param-section" id="params-threshold">
+              <div class="param-group">
+                <label>Type</label>
+                <select class="param-select" id="threshold-type">
+                  <option value="binary">Binary</option>
+                  <option value="adaptive">Adaptive</option>
+                  <option value="otsu">Otsu</option>
+                </select>
+              </div>
+
+              <!-- Binary-specific: value -->
+              <div class="param-group" id="threshold-value-group">
+                <label>Threshold Value <span class="param-value" id="threshold-value-val">127</span></label>
+                <input type="range" class="param-slider" id="threshold-value" min="0" max="255" step="1" value="127">
+              </div>
+
+              <div class="param-group">
+                <label>Max Value <span class="param-value" id="threshold-max-value-val">255</span></label>
+                <input type="range" class="param-slider" id="threshold-max-value" min="0" max="255" step="1" value="255">
+              </div>
+
+              <!-- Adaptive-specific params -->
+              <div id="threshold-adaptive-group">
+                <div class="param-group">
+                  <label>Block Size <span class="param-value" id="threshold-block-size-val">11</span></label>
+                  <input type="range" class="param-slider" id="threshold-block-size" min="3" max="31" step="2" value="11" data-odd="true">
+                </div>
+                <div class="param-group">
+                  <label>C (Offset) <span class="param-value" id="threshold-C-val">5.0</span></label>
+                  <input type="range" class="param-slider" id="threshold-C" min="-50" max="50" step="0.5" value="5" data-float="true">
+                </div>
+                <div class="param-group">
+                  <label>Adaptive Method</label>
+                  <select class="param-select" id="threshold-adaptive-method">
+                    <option value="mean">Mean</option>
+                    <option value="gaussian">Gaussian</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="param-divider"></div>
+
+              <label class="param-toggle">
+                <input type="checkbox" id="threshold-invert">
+                <span class="param-toggle__track"></span>
+                Invert (THRESH_BINARY_INV)
+              </label>
+            </div>
+
+            <!-- ======================
+                 EDGE Parameters
+                 ====================== -->
+            <div class="param-section" id="params-edge">
+              <div class="param-group">
+                <label>Method</label>
+                <select class="param-select" id="edge-method">
+                  <option value="canny">Canny</option>
+                  <option value="sobel">Sobel</option>
+                  <option value="laplacian">Laplacian</option>
+                  <option value="prewitt">Prewitt</option>
+                  <option value="scharr">Scharr</option>
+                  <option value="roberts">Roberts</option>
+                </select>
+              </div>
+
+              <!-- Canny params -->
+              <div id="edge-canny-group">
+                <div class="param-group">
+                  <label>Low Threshold <span class="param-value" id="edge-low-threshold-val">50</span></label>
+                  <input type="range" class="param-slider" id="edge-low-threshold" min="0" max="255" step="1" value="50">
+                </div>
+                <div class="param-group">
+                  <label>High Threshold <span class="param-value" id="edge-high-threshold-val">150</span></label>
+                  <input type="range" class="param-slider" id="edge-high-threshold" min="0" max="255" step="1" value="150">
+                </div>
+              </div>
+
+              <!-- Sobel / Scharr params -->
+              <div id="edge-sobel-group">
+                <div class="param-group">
+                  <label>dx <span class="param-value" id="edge-dx-val">1</span></label>
+                  <input type="range" class="param-slider" id="edge-dx" min="0" max="2" step="1" value="1">
+                </div>
+                <div class="param-group">
+                  <label>dy <span class="param-value" id="edge-dy-val">0</span></label>
+                  <input type="range" class="param-slider" id="edge-dy" min="0" max="2" step="1" value="0">
+                </div>
+              </div>
+
+              <!-- Laplacian params -->
+              <div id="edge-laplacian-group">
+                <div class="param-group">
+                  <label>Kernel Size <span class="param-value" id="edge-kernel-size-val">3</span></label>
+                  <input type="range" class="param-slider" id="edge-kernel-size" min="1" max="7" step="2" value="3" data-odd="true">
+                </div>
+              </div>
+            </div>
+
+            <!-- ======================
+                 HISTOGRAM Parameters
+                 ====================== -->
+            <div class="param-section" id="params-histogram">
+              <label class="param-toggle">
+                <input type="checkbox" id="histogram-color">
+                <span class="param-toggle__track"></span>
+                Color (RGB) Histogram
+              </label>
+
+              <div class="param-divider"></div>
+
+              <div class="param-group">
+                <label>Format</label>
+                <div class="param-radios">
+                  <label class="param-radio">
+                    <input type="radio" name="hist-format" value="json" checked>
+                    <span class="param-radio__label">
+                      <i class="fa-solid fa-chart-area"></i> Chart
+                    </span>
+                  </label>
+                  <label class="param-radio">
+                    <input type="radio" name="hist-format" value="png">
+                    <span class="param-radio__label">
+                      <i class="fa-solid fa-image"></i> Image
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Output Format (for image-producing endpoints) -->
+          <div class="glass-card" style="padding: 1.25rem;" id="output-format-card">
+            <div class="param-group">
+              <label>Output Format</label>
+              <div class="param-radios">
+                <label class="param-radio">
+                  <input type="radio" name="output-format" value="png" checked>
+                  <span class="param-radio__label">PNG</span>
+                </label>
+                <label class="param-radio">
+                  <input type="radio" name="output-format" value="jpeg">
+                  <span class="param-radio__label">JPEG</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apply & Download Buttons -->
+          <div class="studio-actions">
+            <button class="btn btn--primary btn--lg btn--block btn-apply" id="apply-btn">
+              <span class="spinner"></span>
+              <span class="btn-text"><i class="fa-solid fa-wand-magic-sparkles"></i> Apply Filter</span>
+            </button>
+            <button class="btn btn--success btn--block btn-download" id="download-btn">
+              <i class="fa-solid fa-download"></i> Download Result
+            </button>
+          </div>
+
+        </aside>
+
+        <!-- ============================
+             RIGHT COLUMN – Preview
+             ============================ -->
+        <section class="studio-preview">
+
+          <!-- Original Image -->
+          <div class="glass-card preview-card">
+            <div class="preview-card__header">
+              <span class="preview-card__title">
+                <i class="fa-solid fa-image"></i> Original
+              </span>
+            </div>
+            <div class="preview-card__body">
+              <div class="preview-placeholder" id="original-placeholder">
+                <i class="fa-regular fa-image"></i>
+                <p>Upload an image to see the original</p>
+              </div>
+              <img id="original-image" src="" alt="Original image" style="display:none;">
+            </div>
+          </div>
+
+          <!-- Comparison Slider (shown after processing) -->
+          <div class="glass-card preview-card" id="comparison-card" style="display:none;">
+            <div class="preview-card__header">
+              <span class="preview-card__title">
+                <i class="fa-solid fa-right-left"></i> Comparison
+              </span>
+            </div>
+            <div class="preview-card__body" style="padding:0; background:transparent; min-height:0;">
+              <div class="comparison-container" id="comparison-container" style="display:none;">
+                <img src="" alt="Processed">
+                <div class="comparison-overlay">
+                  <img src="" alt="Original">
+                </div>
+                <div class="comparison-handle">
+                  <div class="comparison-handle__knob">
+                    <i class="fa-solid fa-arrows-left-right"></i>
+                  </div>
+                </div>
+                <span class="comparison-label comparison-label--left">Original</span>
+                <span class="comparison-label comparison-label--right">Processed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Histogram Canvas (shown for histogram JSON) -->
+          <div class="glass-card preview-card" id="histogram-card" style="display:none;">
+            <div class="preview-card__header">
+              <span class="preview-card__title">
+                <i class="fa-solid fa-chart-column"></i> Histogram
+              </span>
+            </div>
+            <div class="histogram-canvas-wrap" id="histogram-canvas-wrap">
+              <canvas id="histogram-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Processed Result -->
+          <div class="glass-card preview-card">
+            <div class="preview-card__header">
+              <span class="preview-card__title">
+                <i class="fa-solid fa-sparkles"></i> Result
+              </span>
+            </div>
+            <div class="preview-card__body" style="position:relative;">
+              <div class="preview-placeholder" id="result-placeholder">
+                <i class="fa-regular fa-image"></i>
+                <p>Apply a filter to see the result</p>
+              </div>
+              <img id="result-image" src="" alt="Processed result" style="display:none;">
+              <div class="loading-overlay" id="loading-overlay">
+                <div class="loading-spinner"></div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="/static/script.js" defer></script>
+  <script src="/static/studio.js" defer></script>
+</body>
+</html>
