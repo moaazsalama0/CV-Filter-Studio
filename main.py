@@ -5,6 +5,8 @@ CV Filter Studio — API layer.
 from typing import Optional
 import urllib.request
 
+import os
+
 import cv2
 import numpy as np
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Query
@@ -306,9 +308,9 @@ def _histogram_response(img: np.ndarray, fmt: str, color: bool):
     data = histogram_mod.compute_histogram_data(img, color=color)
     return JSONResponse(data)
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 
-# Root route serves the index page from the static folder
 @app.get("/", response_class=FileResponse)
 async def serve_index():
-    return "static/index.html"
+    return os.path.join(BASE_DIR, "static", "index.html")
