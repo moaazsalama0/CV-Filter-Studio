@@ -1,5 +1,5 @@
 {
   "functions": {
-    "main.py": { "maxDuration": 60 }
+    "**/*.py": { "maxDuration": 60 }
   }
 }
