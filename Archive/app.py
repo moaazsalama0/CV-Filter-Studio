@@ -602,7 +602,7 @@ class FilterApp:
         win.geometry("700x420")
 
         import matplotlib
-        matplotlib.use("TkAgg")
+        matplotlib.use("Agg")
         import matplotlib.pyplot as plt
         from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
         from matplotlib.figure import Figure
