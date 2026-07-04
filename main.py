@@ -314,3 +314,14 @@ app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 @app.get("/", response_class=FileResponse)
 async def serve_index():
     return os.path.join(BASE_DIR, "static", "index.html")
+
+
+# Also serve the raw HTML paths so links that omit the /static prefix work
+@app.get("/studio.html", response_class=FileResponse)
+async def serve_studio():
+    return os.path.join(BASE_DIR, "static", "studio.html")
+
+
+@app.get("/index.html", response_class=FileResponse)
+async def serve_index_html():
+    return os.path.join(BASE_DIR, "static", "index.html")
