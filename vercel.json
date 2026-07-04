@@ -1,10 +1,8 @@
 {
-  "builds": [
-    { "src": "main.py", "use": "@vercel/python" },
-    { "src": "index.html", "use": "@vercel/static" }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/main.py" }
   ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "main.py" },
-    { "src": "/(.*)", "dest": "index.html" }
-  ]
+  "functions": {
+    "main.py": { "maxDuration": 60 }
+  }
 }
