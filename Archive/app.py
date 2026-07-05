@@ -1,8 +1,3 @@
-"""
-CV Filter Studio — Advanced Image Processing Application
-Modern dark-themed UI with real-time filter preview and kernel visualization.
-"""
-
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import cv2
@@ -12,7 +7,6 @@ import threading
 import time
 from collections import OrderedDict
 
-# ── Filter imports ──────────────────────────────────────────────────────────
 from Filters.blur import (blur, gaussian_blur, median_blur,
                           bilateral_filter, box_filter)
 from Filters.edge_detection import (canny_edge_detection, sobel_edge_detection,
@@ -22,7 +16,6 @@ from Filters.threshold import (threshold, adaptive_threshold, otsu_threshold)
 from utils.image_loader import load_image
 from utils.histogram import plot_histogram
 
-# ── Design tokens ────────────────────────────────────────────────────────────
 PAL = {
     "bg":          "#1a1a2e",   # deep navy background
     "surface":     "#16213e",   # card / panel surface
